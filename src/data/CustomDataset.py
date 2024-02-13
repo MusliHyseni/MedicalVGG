@@ -24,7 +24,7 @@ def get_random_image(folder: str):
                 num_files += 1
 
 class CustomDataset(Dataset):
-    def __init__(self, data_folders: list):
+    def __init__(self, data_folders: list, root_dir: str):
         self.data_folders = data_folders
         
     def __len__(self):
@@ -36,9 +36,10 @@ class CustomDataset(Dataset):
         folder_idx = np.randint(0, len(self.data_folders), (1, ))[0]
         folder = self.data_folders[folder_idx]
          
-        random_image = get_random_image(folder)
-        image = cv2.imread(f"{folder}/{random_image}")
-        sample, label = image, folder.split('/')[-1]
+        path_to_folder = os.path.join(self.root_dir, folder)
+        random_image = get_random_image(path_to_folder)
+        image = (f"{path_to_folder}/{random_image}")
+        sample, label = image, folder
         
         return sample, label
     
